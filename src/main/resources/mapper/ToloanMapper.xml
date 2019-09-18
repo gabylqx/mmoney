@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.mmoney.dao.ToloanMapper">
+    <select id="selectToloans" parameterType="java.lang.Integer" resultType="com.mmoney.pojo.Toloan">
+        SELECT * FROM tol_toloan WHERE tol_usr_id = #{usrId}
+    </select>
+    <select id="selectToloansById" parameterType="java.lang.String" resultType="com.mmoney.pojo.Toloan">
+        SELECT * FROM tol_toloan WHERE tol_id = #{tolId}
+    </select>
+    <select id="queryToloan" parameterType="com.mmoney.pojo.PageChoice" resultType="com.mmoney.pojo.Toloan">
+        SELECT * FROM tol_toloan WHERE tol_usr_id = #{id}
+        ORDER BY tol_bdate DESC
+        <if test="pageNow != null">
+            limit #{beginRow},#{pageSize}
+        </if>
+    </select>
+    <select id="queryToloanRecordCnt" parameterType="com.mmoney.pojo.PageChoice" resultType="int">
+       SELECT count(*) FROM tol_toloan
+    </select>
+
+    <insert id="insertToloan" parameterType="com.mmoney.pojo.Toloan">
+        INSERT INTO tol_toloan(tol_id,tol_usr_id,tol_bmoney,tol_omoney,tol_bstages)VALUES
+        (#{tolId},#{tolUsrId},#{tolBmoney},#{tolOmoney},#{tolBstages})
+    </insert>
+    <select id="queryThisToloan" parameterType="java.lang.String" resultType="com.mmoney.pojo.Toloan">
+    SELECT * FROM selectBtoloanByIdtol_toloan WHERE tol_id = #{tolId}
+    </select>
+
+    <update id="updatetoloan" parameterType="com.mmoney.pojo.Toloan">
+        UPDATE tol_toloan SET
+        tol_omoney = #{tolOmoney},
+        tol_still = #{tolStill}
+		WHERE  tol_id = #{tolId}
+    </update>
+</mapper>

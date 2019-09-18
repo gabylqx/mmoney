@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.mmoney.dao.OverdueMapper">
+    <select id="selectOverdueById" parameterType="int" resultType="com.mmoney.pojo.Overdue">
+      select * from ode_overdue  where ode_id = #{odeId}
+    </select>
+    <!--通过用户名查找逾期用户信息-->
+    <select id="odeTotalQuery" parameterType="String" resultMap="odeTotalMap">
+        select *,count(*) ode_num
+        from ode_overdue JOIN usr_user ON usr_id=ode_usr_id
+        <where>
+
+            <if test="usrTel!=null">
+                and usr_tel like concat('%',#{usrTel },'%')
+            </if>
+        </where>
+        GROUP BY usr_id
+    </select>
+    <!--通过用户名查找逾期记录-->
+    <select id="overdueQueryByTel" parameterType="String" resultType="com.mmoney.pojo.Overdue">
+        select ode_id,ode_tol_id,ode_money,ode_time,ode_state
+        from ode_overdue JOIN usr_user ON usr_id=ode_usr_id
+        <where>
+
+            <if test="usrTel!=null">
+                and usr_tel =#{usrTel }
+            </if>
+        </where>
+
+    </select>
+
+    <resultMap id="odeTotalMap" type="com.mmoney.pojo.Overdue">
+        <id property="odeId" column="ode_id"></id>
+        <result property="odeUsrId" column="ode_usr_id"></result>
+        <result property="odeTolId" column="ode_tol_id"></result>
+        <result property="odeNum" column="ode_num"></result>
+        <association property="user" javaType="com.mmoney.pojo.User">
+            <id property="usrId" column="usr_id"></id>
+            <result property="usrTel" column="usr_tel"></result>
+            <result property="usrName" column="usr_name"></result>
+            <result property="usrPswd" column="usr_pswd"></result>
+            <result property="usrEmail" column="usr_email"></result>
+            <result property="usrRate" column="usr_rate"></result>
+            <result property="usrIdcard" column="usr_idcard"></result>
+            <result property="usrAge" column="usr_age"></result>
+            <result property="usrJob" column="usr_job"></result>
+            <result property="usrGrant" column="usr_grant"></result>
+            <result property="usrSalary" column="usr_salary"></result>
+            <result property="UsrCredit" column="usr_credit"></result>
+            <result property="usrQuota" column="usr_quota"></result>
+            <result property="usrExquota" column="usr_exquota"></result>
+        </association>
+    </resultMap>
+</mapper>

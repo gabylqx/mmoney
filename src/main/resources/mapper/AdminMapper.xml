@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmoney.dao.AdminMapper">
+    <!--管理员功能-->
+    <!--查询利息-->
+    <select id="queryIntes" resultType="java.math.BigDecimal">
+        SELECT SUM(bto_intes) FROM bto_btoloan;
+    </select>
+    <select id="queryInte" resultType="java.math.BigDecimal">
+        SELECT SUM(bto_intes) FROM bto_btoloan WHERE bto_still = 1;
+    </select>
+    <!--贷款信息查询-->
+    <select id="queryToloanDetil" resultType="com.mmoney.pojo.Toloan">
+        select * from tol_toloan;
+    </select>
+
+    <select id="queryToloanDetilPart"  parameterType="com.mmoney.pojo.PageChoice" resultType="com.mmoney.pojo.Toloan">
+        select * from tol_toloan limit #{beginRow},#{pageSize};
+    </select>
+    <select id="queryBtolanById"  parameterType="java.lang.String" resultType="com.mmoney.pojo.Btoloan">
+        select * from bto_btoloan where bto_tol_id = #{btoTolId};
+    </select>
+</mapper>

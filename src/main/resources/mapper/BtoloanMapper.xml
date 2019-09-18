@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mmoney.dao.BtoloanMapper">
+    <select id="selectBtoloanById" parameterType="java.lang.Integer" resultType="com.mmoney.pojo.Btoloan">
+      select * from bto_btoloan where bto_id = #{btoId}
+    </select>
+
+    <select id="selectBtoloanListById" parameterType="java.lang.String" resultType="com.mmoney.pojo.Btoloan">
+    select * from bto_btoloan where bto_tol_id = #{btoTolId}
+</select>
+
+    <update id="UpdateBtoloan" parameterType="com.mmoney.pojo.Btoloan">
+        <selectKey keyProperty="btoId" order="AFTER" resultType="java.lang.Integer">
+            select last_insert_id();
+        </selectKey>
+        UPDATE bto_btoloan set
+        bto_still = #{btoStill}
+        WHERE
+        bto_id = #{btoId}
+    </update>
+    <insert id="insertBtoloan" parameterType="com.mmoney.pojo.Btoloan">
+        INSERT INTO bto_btoloan(bto_tol_id,bto_prin,bto_intes,bto_fdate,bto_period)VALUES
+        (#{btoTolId},#{btoPrin},#{btoIntes},#{btoFdate},#{btoPeriod})
+    </insert>
+</mapper>

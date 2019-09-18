@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mmoney.dao.CrowdfoundMapper">
+
+    <!--插入众筹项目信息-->
+    <insert id="insertCrowfound" parameterType="com.mmoney.pojo.Crowdfounding">
+      INSERT INTO cf_crowdfunding(cf_name,cf_usr_id,cf_target,cf_startdate,cf_deline,cf_explain,cf_imgpath)
+      VALUES(#{cfName},#{cfUsrId},#{cfTarget},#{cfStartDate},#{cfDeline},#{cfExplain},#{cfImgpath})
+    </insert>
+
+    <!--显示所有众筹项目,只显示最新4个项目-->
+    <select id="showCrowdfounds" resultType="com.mmoney.pojo.Crowdfounding">
+      SELECT*FROM cf_crowdfunding ORDER BY cf_id DESC LIMIT 15
+    </select>
+
+    <!--查询单个项目-->
+    <select id="findCrowdById" parameterType="java.lang.Integer" resultType="com.mmoney.pojo.Crowdfounding">
+        SELECT*FROM cf_crowdfunding WHERE  cf_id = #{cfId}
+    </select>
+
+    <!--findRecord查询众筹-->
+    <!--插入众筹子表-->
+    <insert id="insertRecord" parameterType="com.mmoney.pojo.Record">
+        INSERT INTO rc_record(rc_cf_id,rc_usr_id,rc_join_time,rc_money)VALUES
+        (#{rcCfId},#{rcUsrId},#{rcJoinTime},#{rcMoney})
+    </insert>
+    <!--更新众筹主表金额-->
+    <update id="updateCfMoney" parameterType="com.mmoney.pojo.Crowdfounding">
+        UPDATE cf_crowdfunding SET cf_money = ${cfMoney}
+        WHERE cf_id = #{cfId}
+    </update>
+    <!--查询所有众筹子表-->
+    <select id="findCrowUsers" parameterType="java.lang.Integer" resultType="com.mmoney.pojo.Record">
+        SELECT *FROM rc_record WHERE rc_cf_id = #{cfId} ORDER BY rc_join_time DESC LIMIT 5
+    </select>
+</mapper>
